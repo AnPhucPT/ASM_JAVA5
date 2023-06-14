@@ -12,6 +12,9 @@ import com.example.anphuc.repository.OrderDetailDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api")
 public class OrderDetailApi {
     @Autowired
     OrderDetailDAO orderDetailDAO;
@@ -32,23 +35,44 @@ public class OrderDetailApi {
     @Autowired
     HttpServletRequest request;
 
-    @PostMapping("")
+    @GetMapping("/order")
+    public ResponseEntity<?> getOrder() {
+        return ResponseEntity.ok(orderDAO.findAll());
+    }
+
+    @DeleteMapping("/order/{id}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Integer id) {
+        orderDAO.deleteById(id);
+        return ResponseEntity.ok(new APIResponse(null));
+    }
+
+    @GetMapping("/orderDetail")
+    public ResponseEntity<?> getOrderDetail() {
+        return ResponseEntity.ok(orderDetailDAO.findAll());
+    }
+
+    @PostMapping("/order")
     public ResponseEntity<?> createOderDetail(@RequestBody OrderDTO dto) {
-        Account acc = (Account)  request.getAttribute("user");
+        Account acc = (Account) request.getAttribute("user");
         Order order = new Order();
-        double total = 0;
+        double totalPrice = 0;
+        int totalQuantity = 0;
         List<OrderDetail> orderDetailList = new ArrayList<>();
-        for (OrderItemDTO orderItemDTO : dto.getOrderItemDTOS()) {
+        for (OrderItemDTO item : dto.getOrderItemDTOS()) {
             OrderDetail orderDetail = new OrderDetail();
-            orderDetail.setProduct(orderItemDTO.getProduct());
-            orderDetail.setQuantity(orderItemDTO.getQuantity());
-            total += orderItemDTO.getProduct().getPrice()*orderItemDTO.getQuantity();
+            orderDetail.setProduct(item.getProduct());
+            orderDetail.setQuantity(item.getQuantity());
+            Double TotalPriceEachItem = Double.valueOf(item.getProduct().getPrice() * item.getQuantity());
+            orderDetail.setTotal(TotalPriceEachItem);
+            totalPrice += TotalPriceEachItem;
+            totalQuantity += item.getQuantity();
             orderDetail.setOrders(order);
             orderDetailList.add(orderDetail);
         }
-        total += dto.getShipFee();
+        totalPrice += dto.getShipFee();
         order.setOrderDetailList(orderDetailList);
-        order.setTotal(total);
+        order.setTotalPrice(totalPrice);
+        order.setTotalQuantity(totalQuantity);
         order.setAddress(dto.getAddress());
         order.setAccount(acc);
         orderDAO.save(order);

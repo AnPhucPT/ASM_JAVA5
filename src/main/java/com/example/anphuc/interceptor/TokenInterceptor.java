@@ -20,14 +20,16 @@ public class TokenInterceptor implements HandlerInterceptor {
     AccountDAO accountDAO;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
         String token = getTokenFromRequest(request);
+        System.out.println(token);
         String uri = request.getRequestURI();
-//        Observer pattern
-        if(uri.startsWith("/api/public")){
+        // Observer pattern
+        if (uri.startsWith("/api/public")) {
             return true;
-        }else{
-            if(token !=null){
+        } else {
+            if (token != null) {
                 try {
                     tokenProvider.validateToken(token);
                     Integer userId = tokenProvider.getIdFromToken(token);
@@ -35,20 +37,20 @@ public class TokenInterceptor implements HandlerInterceptor {
                         throw new EntityNotFoundException("User not found");
                     });
                     request.setAttribute("user", account);
-                    if(uri.startsWith("/api/admin") || uri.startsWith("/admin") && !account.getAdmin()){
+                    if (uri.startsWith("/api/admin") || uri.startsWith("/admin") && !account.getAdmin()) {
                         return false;
                     }
                     return true;
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     throw new TokenException(ex.getMessage());
                 }
-            }else{
+            } else {
                 throw new TokenException("Empty token!");
             }
         }
     }
 
-    public String getTokenFromRequest(HttpServletRequest request){
+    public String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);

@@ -68,6 +68,14 @@ var template = ` <nav class="bg-white border-gray-200 dark:bg-gray-900 fixed w-f
                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Admin</a>
                         </li>
                         <li>
+                            <a href="/cart"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">My Cart</a>
+                        </li>
+                        <li>
+                            <a href="/order"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">My Order</a>
+                        </li>
+                        <li>
                             <button data-dropdown-placement="left-start" data-dropdown-offset-distance="5" type="button"
                                     data-dropdown-toggle="language-dropdown-menu"
                                     class="w-full cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
@@ -141,14 +149,14 @@ var template = ` <nav class="bg-white border-gray-200 dark:bg-gray-900 fixed w-f
                 </ul>
             </div>
         </div>
-    </nav>`
+    </nav>`;
 
 var renderHeader = (id = '', activeItem = 1) => {
-    document.getElementById(id).innerHTML = template
-    var sidebarItems = document.querySelectorAll('[data-active-sidebar]')
-    sidebarItems.forEach(item => {
+    document.getElementById(id).innerHTML = template;
+    var sidebarItems = document.querySelectorAll('[data-active-sidebar]');
+    sidebarItems.forEach((item) => {
         if (item.dataset.activeSidebar == activeItem) {
-            item.classList.add('active')
+            item.classList.add('active');
         }
-    })
-}
+    });
+};

@@ -1,5 +1,6 @@
 package com.example.anphuc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class OrderDetail {
     private int id;
 
     private Integer quantity = 1;
+    private Double total;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonManagedReference
@@ -29,7 +31,7 @@ public class OrderDetail {
     private Product product;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @JsonIgnore
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @Fetch(value = FetchMode.JOIN)
     private Order orders;

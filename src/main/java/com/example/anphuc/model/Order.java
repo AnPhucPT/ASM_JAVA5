@@ -1,6 +1,6 @@
 package com.example.anphuc.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,13 +21,15 @@ public class Order {
     private int id;
 
     private String address;
-    private Double total;
+    private Integer totalQuantity;
+    private Double totalPrice;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date createDate = new Date();
 
-    @JsonBackReference
-    @OneToMany(mappedBy = "orders", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // @JsonBackReference
+    @OneToMany(mappedBy = "orders", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetailList;
 
     @ManyToOne(fetch = FetchType.EAGER)
