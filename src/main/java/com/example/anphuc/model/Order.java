@@ -23,6 +23,7 @@ public class Order {
     private String address;
     private Integer totalQuantity;
     private Double totalPrice;
+    private Boolean isConfirm = false;
 
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")

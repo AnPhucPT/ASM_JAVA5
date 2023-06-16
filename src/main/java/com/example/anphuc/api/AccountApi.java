@@ -7,6 +7,7 @@ import com.example.anphuc.payload.response.APIResponse;
 import com.example.anphuc.repository.AccountDAO;
 import com.example.anphuc.utils.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,13 @@ public class AccountApi {
 
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile() {
-        Account acc = (Account)  request.getAttribute("user");
+        Account acc = (Account) request.getAttribute("user");
         return ResponseEntity.ok(new APIResponse(acc));
+    }
+
+    @GetMapping("/public/total-account")
+    public ResponseEntity<?> TotalOrderProduct() {
+        int length = accountDAO.findAll().size();
+        return ResponseEntity.ok(length);
     }
 }

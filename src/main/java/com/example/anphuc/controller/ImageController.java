@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 @Controller
 public class ImageController {
 
-    private final Path root_have_path = Paths.get("./src/main/resources/static/img/");
+    private final Path root_have_path = Paths.get("./src/main/resources/static/site/dist/img/");
 
     public Resource load(String filename, String path) {
         try {
