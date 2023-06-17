@@ -35,4 +35,9 @@ public class adminHomeController {
         model.addAttribute("address", orderDAO.findById(id).get().getAddress());
         return "admin/orderDetail_manager";
     }
+
+    @GetMapping("/product-manager")
+    public String product() {
+        return "admin/product_manager";
+    }
 }

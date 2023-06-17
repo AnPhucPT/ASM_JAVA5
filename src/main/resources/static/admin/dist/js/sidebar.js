@@ -50,7 +50,7 @@ var template = ` <!-- Brand Logo -->
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a data-active-sidebar=2 href="/admin/oder-manager" class="nav-link">
+                        <a data-active-sidebar=2 href="/admin/order-manager" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Order Manager</p>
                         </a>
@@ -65,6 +65,12 @@ var template = ` <!-- Brand Logo -->
                         <a data-active-sidebar=4 href="pages/data.html" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Accounts</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a data-active-sidebar=5 href="/admin/product-manager" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Product</p>
                         </a>
                     </li>
                 </ul>
