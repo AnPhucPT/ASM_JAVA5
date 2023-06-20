@@ -2,21 +2,33 @@ package com.example.anphuc.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.Date;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "products")
 @NamedEntityGraph(name = "graph.product", attributeNodes = {
         @NamedAttributeNode("category")
 })
 public class Product {
+    public Product(String name, String image, Integer price, Category category) {
+        this.name = name;
+        this.image = image;
+        this.price = price;
+        this.category = category;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -25,9 +37,9 @@ public class Product {
     private String image;
     private Integer price;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date createDate = new Date();
+    private ZonedDateTime createDate = ZonedDateTime.now(ZoneOffset.UTC);
 
     private Boolean available = true;
 
