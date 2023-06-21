@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/admin/plugins/toastr/toastr.min.css">
 </head>
 
-<body ng-app="app" ng-controller="productController" class="hold-transition sidebar-mini ">
+<body ng-app="app" ng-controller="categoryController" class="hold-transition sidebar-mini ">
     <div style="position: relative;" class="wrapper ">
         <div style="position: absolute; z-index: 9999; opacity: 0.5; " ng-show="loading" class="w-100 h-100  top-0 left-0 d-flex justify-content-center align-items-center bg-light">
             <div class="">
@@ -30,7 +30,9 @@
                 </div>
             </div>
         </div>
+        <!-- Navbar -->
         <div id="header"></div>
+        <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
         <aside id="sidebar" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
@@ -46,8 +48,8 @@
                             <div class="card">
                                 <!-- /.card-header -->
                                 <div class="card-header d-flex align-items-center">
-                                    <h3 class="mb-0">List of Products</h3>
-                                    <button style="display: flex; flex-wrap: wrap; align-items: center;" ng-click="openModalCreateProduct()" class="btn btn-outline-primary ml-3 py-2" href="#" role="button"> Add new Product</button>
+                                    <h3 class="mb-0">List of Categories</h3>
+                                    <button style="display: flex; flex-wrap: wrap; align-items: center;" ng-click="openModalCreateProduct()" class="btn btn-outline-primary ml-3 py-2" href="#" role="button"> Add new Category</button>
                                 </div>
 
                                 <!-- modal -->
@@ -55,7 +57,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title">Create New Product</h4>
+                                                <h4 class="modal-title">Create New Category</h4>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -63,38 +65,15 @@
                                             <div class="modal-body">
                                                 <div class="card card-secondary">
                                                     <div class="card-header">
-                                                        <h3 class="card-title">Product Form</h3>
+                                                        <h3 class="card-title">Category Form</h3>
                                                     </div>
                                                     <!-- /.card-header -->
                                                     <!-- form start -->
-                                                    <form id="form-product" enctype="multipart/form-data">
+                                                    <form id="form-product">
                                                         <div class="card-body">
                                                             <div class="form-group">
                                                                 <label for="name">Name:</label>
-                                                                <input required ng-model="formProduct.name" name="name" type="text" class="form-control" id="name" placeholder="Enter Name">
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="form-group col-6">
-                                                                    <label for="file">image:</label>
-                                                                    <label for="imageInput" style="width: 100%; height: 200px; border: 2px dashed #ccc; cursor: pointer; padding: 2px; overflow: hidden;" id="image-container" class="ratio ratio-1x1 d-flex justify-content-center rounded align-items-center">
-                                                                        <span ng-hide="avatar">Choose image here</span>
-                                                                        <img ng-show="avatar" ng-src="{{avatar}}" id="previewAvatar" alt="Preview" style="width: 100%; height: 100%; object-fit: cover">
-
-                                                                    </label>
-                                                                    <input custom-on-change="handleUploadImage" type="file" id="imageInput" style="display: none;">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <div class="form-group">
-                                                                        <label for="price">Price</label>
-                                                                        <input required ng-model="formProduct.price" name="price" type="number" min="1" value="100" class="form-control" id="price" placeholder="0">
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label>Category:</label>
-                                                                        <select required ng-model="formProduct.category.id" name="category" class="form-control" style="width: 100%;">
-                                                                            <option ng-repeat="category in categories" ng-value="{{category.id}}">{{category.name}}</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
+                                                                <input required ng-model="category.name" name="name" type="text" class="form-control" id="name" placeholder="Enter Category Name">
                                                             </div>
 
                                                             <!-- /.form-group -->
@@ -102,7 +81,7 @@
                                                         <!-- /.card-body -->
 
                                                         <div class="card-footer">
-                                                            <button ng-if="!isEdit" ng-click="submit()" class="w-100 btn btn-primary ">Create</button>
+                                                            <button ng-if="!isEdit" ng-click="submit()" class="w-100 btn btn-primary">Create</button>
                                                             <button ng-if="isEdit" ng-click="update()" class="w-100 btn btn-primary">Update</button>
                                                         </div>
                                                     </form>
@@ -146,28 +125,16 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>NAME</th>
-                                                <th class="text-center">IMAGE</th>
-                                                <th>PRICE</th>
-                                                <th>DATE CREATE</th>
-                                                <th>AVAILABLE</th>
-                                                <th>CATEGORY</th>
                                                 <th>ACTION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="product in products">
-                                                <td class="align-middle">{{product.id}}</td>
-                                                <td class="align-middle">{{product.name}}</td>
-                                                <td class="text-center">
-                                                    <img style="height: 60px;" class=" product-thumbnail rounded" ng-src="/images/product/{{product.image}}">
-                                                </td>
-                                                <td class="align-middle">{{product.price}}</td>
-                                                <td class="align-middle">{{product.createDate}}</td>
-                                                <td class="align-middle">{{product.available}}</td>
-                                                <td class="align-middle">{{product.category.name}}</td>
+                                            <tr ng-repeat="category in categories">
+                                                <td class="align-middle">{{category.id}}</td>
+                                                <td class="align-middle">{{category.name}}</td>
                                                 <td class="align-middle">
-                                                    <button name="" id="" class="btn btn-danger" ng-click="openModalDeleteProduct(product.id)" role="button"><i class="fas fa-trash"></i></button>
-                                                    <button data-toggle="modal" name="" id="" class="btn btn-primary toastsDefaultAutohide" ng-click="edit(product)" role="button"><i class="fas fa-pen-square"></i></button>
+                                                    <button name="" id="" class="btn btn-danger" ng-click="openModalDeleteProduct(category.id)" role="button"><i class="fas fa-trash"></i></button>
+                                                    <button data-toggle="modal" name="" id="" class="btn btn-primary" ng-click="edit(category)" role="button"><i class="fas fa-pen-square"></i></button>
                                                 </td>
                                             </tr>
 
@@ -176,11 +143,6 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>NAME</th>
-                                                <th class="text-center">IMAGE</th>
-                                                <th>PRICE</th>
-                                                <th>DATE CREATE</th>
-                                                <th>AVAILABLE</th>
-                                                <th>CATEGORY</th>
                                                 <th>ACTION</th>
                                             </tr>
                                         </tfoot>
@@ -218,7 +180,7 @@
     <!-- Aside -->
     <script src="/admin/dist/js/sidebar.js"></script>
     <script>
-        renderSidebar('sidebar', 5)
+        renderSidebar('sidebar', 3)
     </script>
     <script src="/admin/dist/js/header.js"></script>
     <script>
@@ -245,8 +207,18 @@
     <script src="/admin/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="/admin/dist/js/demo.js"></script>
-    <script src="/admin/dist/js/controller/productController.js"></script>
+    <script src="/admin/dist/js/controller/categoryController.js"></script>
     <script src="/admin/plugins/toastr/toastr.min.js"></script>
+    <script>
+        $('.toastsDefaultAutohide').click(function () {
+            $(document).Toasts('create', {
+                title: 'Toast Title',
+                autohide: true,
+                delay: 750,
+                body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+            })
+        });
+    </script>
 </body>
 
 </html>

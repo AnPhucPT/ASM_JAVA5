@@ -1,29 +1,29 @@
 var app = angular.module('app', []);
-app.controller('productController', function ($scope, $http, $timeout) {
+app.controller('categoryController', function ($scope, $http, $timeout) {
     $scope.loading = false;
     $scope.isEdit = false;
 
-    $scope.handleUploadImage = (e) => {
-        if (e.target.files.length) {
-            $scope.avatar = URL.createObjectURL(e.target.files[0]);
-            $scope.$apply();
-        }
+    $scope.edit = (category) => {
+        $scope.isEdit = true;
+        $scope.category = { ...category };
+        $('#modal-default').modal('toggle');
+    };
+
+    $scope.category = {
+        id: '',
+        name: '',
     };
 
     // Create Product
     $scope.submit = () => {
         $('#modal-default').modal('toggle');
         $scope.loading = true;
-        var formData = $scope.formDataForCreateProduct();
         $http
-            .post('/api/public/products', formData, {
-                headers: { 'Content-Type': undefined },
-                transformRequest: angular.identity,
-            })
+            .post('/api/public/categories', { ...$scope.category })
             .then(
                 (res) => {
                     $('#example1').DataTable().destroy();
-                    $scope.products = [...$scope.products, { ...res.data }];
+                    $scope.categories = [...$scope.categories, { ...res.data }];
                     $scope.initDataTable();
                 },
                 (err) => {
@@ -45,20 +45,17 @@ app.controller('productController', function ($scope, $http, $timeout) {
                 }, 1500);
             });
     };
-    //Update Product
-    $scope.update = function (product) {
+    //Update Category
+    $scope.update = function () {
         $('#modal-default').modal('toggle');
         $scope.loading = true;
-        var formData = $scope.formDataForUpdateProduct();
+
         $http
-            .put('/api/public/products', formData, {
-                headers: { 'Content-Type': undefined },
-                transformRequest: angular.identity,
-            })
+            .put('/api/public/categories', { ...$scope.category })
             .then(
                 (res) => {
+                    $scope.categories = res.data;
                     $('#example1').DataTable().destroy();
-                    $scope.products = res.data;
                     $scope.initDataTable();
                 },
                 (err) => {
@@ -84,11 +81,11 @@ app.controller('productController', function ($scope, $http, $timeout) {
     $scope.delete = () => {
         $scope.loading = true;
         $http
-            .delete('/api/public/products/' + $scope.deleteProductId)
+            .delete('/api/public/categories/' + $scope.deleteProductId)
             .then((res) => {
                 console.log(res.data.message);
                 $('#example1').DataTable().destroy();
-                $scope.products = $scope.products.filter(
+                $scope.categories = $scope.categories.filter(
                     (item) => item.id !== $scope.deleteProductId,
                 );
                 $scope.initDataTable();
@@ -112,19 +109,24 @@ app.controller('productController', function ($scope, $http, $timeout) {
             });
     };
 
-    //Show Product to modal
-    $scope.edit = (product) => {
-        $scope.isEdit = true;
-        $scope.avatar = '/images/product/' + product.image;
-        $scope.formProduct = { ...product };
-        $('#modal-default').modal('toggle');
+    $http
+        .get('/api/public/categories')
+        .then((res) => {
+            console.log(res.data);
+            $scope.categories = res.data;
+            $scope.initDataTable();
+        })
+        .catch((err) => {
+            Promise.reject(err);
+        });
+
+    $scope.createToast = (options) => {
+        $(document).Toasts('create', options);
     };
 
     $scope.openModalCreateProduct = () => {
         $scope.isEdit = false;
-        $scope.avatarPreview = null;
-        $scope.avatar = null;
-        $scope.resetFormProduct();
+        $scope.resetFormCategory();
         $('#modal-default').modal('toggle');
     };
 
@@ -133,66 +135,12 @@ app.controller('productController', function ($scope, $http, $timeout) {
         $('#modal-delete-confirm').modal('toggle');
     };
 
-    // =============================================== //
-
-    $scope.createToast = (options) => {
-        $(document).Toasts('create', options);
-    };
-
-    $scope.resetFormProduct = () => {
-        $scope.formProduct = {
+    $scope.resetFormCategory = () => {
+        $scope.category = {
             id: '',
             name: '',
-            price: 100,
-            image: '',
-            category: {
-                id: 1,
-            },
         };
     };
-
-    $scope.formDataForUpdateProduct = () => {
-        var formData = new FormData();
-        formData.append('id', $scope.formProduct.id);
-        formData.append('name', $scope.formProduct.name);
-        formData.append('price', $scope.formProduct.price);
-        formData.append('categoryId', $scope.formProduct.category.id);
-        if (document.getElementById('imageInput').files.length > 0) {
-            formData.append(
-                'file',
-                document.getElementById('imageInput').files[0],
-            );
-        }
-        return formData;
-    };
-
-    $scope.formDataForCreateProduct = () => {
-        var formData = new FormData();
-        formData.append('name', $scope.formProduct.name);
-        formData.append('price', $scope.formProduct.price);
-        formData.append('categoryId', $scope.formProduct.category.id);
-        formData.append('file', document.getElementById('imageInput').files[0]);
-        return formData;
-    };
-
-    $http
-        .get('/api/public/products')
-        .then((res) => {
-            $scope.products = res.data;
-            $scope.initDataTable();
-        })
-        .catch((err) => {
-            Promise.reject(err);
-        });
-
-    $http
-        .get('/api/public/categories')
-        .then((res) => {
-            $scope.categories = res.data;
-        })
-        .catch((err) => {
-            Promise.reject(err);
-        });
 
     $scope.initDataTable = () => {
         return $(document).ready(function () {
@@ -210,18 +158,5 @@ app.controller('productController', function ($scope, $http, $timeout) {
                 .container()
                 .appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
-    };
-});
-
-app.directive('customOnChange', function () {
-    return {
-        restrict: 'A',
-        link: function (scope, element, attrs) {
-            var onChangeHandler = scope.$eval(attrs.customOnChange);
-            element.on('change', onChangeHandler);
-            element.on('$destroy', function () {
-                element.off();
-            });
-        },
     };
 });

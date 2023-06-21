@@ -56,7 +56,7 @@ var template = ` <!-- Brand Logo -->
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a data-active-sidebar=3 href="pages/data.html" class="nav-link">
+                        <a data-active-sidebar=3 href="/admin/category-manager" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Categories</p>
                         </a>

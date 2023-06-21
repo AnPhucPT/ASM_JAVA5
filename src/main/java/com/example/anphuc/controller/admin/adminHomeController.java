@@ -29,6 +29,11 @@ public class adminHomeController {
         return "admin/order_mangaer";
     }
 
+    @GetMapping("/category-manager")
+    public String category() {
+        return "admin/category_manager";
+    }
+
     @GetMapping("/order-detail-manager/{id}")
     public String orderDetail(Model model, @PathVariable Integer id) {
         model.addAttribute("orderDetails", orderDetailDAO.findAllByOrders_Id(id));
