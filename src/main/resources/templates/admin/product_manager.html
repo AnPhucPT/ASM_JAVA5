@@ -20,6 +20,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <!-- Toastr -->
     <link rel="stylesheet" href="/admin/plugins/toastr/toastr.min.css">
+    <style>
+        .force-show {
+            display: block !important;
+        }
+    </style>
 </head>
 
 <body ng-app="app" ng-controller="productController" class="hold-transition sidebar-mini ">
@@ -140,7 +145,7 @@
                                 </div>
                                 <!-- /.modal -->
 
-                                <div class="card-body">
+                                <div ng-class="{'force-show': true}" class="card-body d-none ">
                                     <table id="example1" class="table table-bordered rounded table-hover     w-100">
                                         <thead>
                                             <tr>
