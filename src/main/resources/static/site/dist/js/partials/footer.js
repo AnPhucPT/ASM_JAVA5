@@ -1,6 +1,6 @@
 var footer = `<footer class="p-4 bg-gray-50 md:p-8 lg:p-10 dark:bg-gray-900">
 <div class="mx-auto max-w-screen-xl text-center">
-    <a href="/" class="flex justify-center items-center text-2xl font-semibold text-gray-900 dark:text-white">
+    <a href="/static" class="flex justify-center items-center text-2xl font-semibold text-gray-900 dark:text-white">
         <img class="w-24 mx-auto" src="/images/logo/logo.png" alt="">
     </a>
     <p class="my-6 text-gray-500 dark:text-gray-400">Open-source library of over 400+ web
