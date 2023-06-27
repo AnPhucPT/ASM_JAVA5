@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.anphuc.repository.OrderDAO;
-import com.example.anphuc.repository.OrderDetailDAO;
+import com.example.anphuc.repository.OrderRepository;
+import com.example.anphuc.repository.OrderDetailRepository;
 
 @Controller
 @RequestMapping("/admin")
 public class adminHomeController {
     @Autowired
-    OrderDetailDAO orderDetailDAO;
+    OrderDetailRepository orderDetailRepository;
 
     @Autowired
-    OrderDAO orderDAO;
+    OrderRepository orderRepository;
 
     @GetMapping("")
     public String home() {
@@ -36,8 +36,8 @@ public class adminHomeController {
 
     @GetMapping("/order-detail-manager/{id}")
     public String orderDetail(Model model, @PathVariable Integer id) {
-        model.addAttribute("orderDetails", orderDetailDAO.findAllByOrders_Id(id));
-        model.addAttribute("address", orderDAO.findById(id).get().getAddress());
+        model.addAttribute("orderDetails", orderDetailRepository.findAllByOrders_Id(id));
+        model.addAttribute("address", orderRepository.findById(id).get().getAddress());
         return "admin/orderDetail_manager";
     }
 

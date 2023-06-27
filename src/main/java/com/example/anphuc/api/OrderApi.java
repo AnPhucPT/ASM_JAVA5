@@ -6,9 +6,9 @@ import com.example.anphuc.model.Account;
 import com.example.anphuc.model.Order;
 import com.example.anphuc.model.OrderDetail;
 import com.example.anphuc.payload.response.APIResponse;
-import com.example.anphuc.repository.AccountDAO;
-import com.example.anphuc.repository.OrderDAO;
-import com.example.anphuc.repository.OrderDetailDAO;
+import com.example.anphuc.repository.AccountRepository;
+import com.example.anphuc.repository.OrderRepository;
+import com.example.anphuc.repository.OrderDetailRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,66 +28,66 @@ import java.util.List;
 @RequestMapping("/api")
 public class OrderApi {
     @Autowired
-    OrderDetailDAO orderDetailDAO;
+    OrderDetailRepository orderDetailRepository;
     @Autowired
-    OrderDAO orderDAO;
+    OrderRepository orderRepository;
     @Autowired
-    AccountDAO accountDAO;
+    AccountRepository accountRepository;
     @Autowired
     HttpServletRequest request;
 
     @GetMapping("/order")
     public ResponseEntity<?> getOrder() {
-        return ResponseEntity.ok(orderDAO.findAll());
+        return ResponseEntity.ok(orderRepository.findAll());
     }
 
     @GetMapping("/order/account-{id}")
     public ResponseEntity<?> getOrderByAccount(@PathVariable Integer id) {
-        return ResponseEntity.ok(orderDAO.findAllByAccount_Id(id));
+        return ResponseEntity.ok(orderRepository.findAllByAccount_Id(id));
     }
 
     @PutMapping("/public/order/confirm-{id}")
     public ResponseEntity<?> confirm(@PathVariable Integer id) {
-        Order order = orderDAO.findById(id).get();
+        Order order = orderRepository.findById(id).get();
         order.setIsConfirm(true);
-        orderDAO.save(order);
+        orderRepository.save(order);
 
-        return ResponseEntity.ok(orderDAO.findAll());
+        return ResponseEntity.ok(orderRepository.findAll());
     }
 
     @PutMapping("/public/order/cancel-{id}")
     public ResponseEntity<?> cancel(@PathVariable Integer id) {
-        Order order = orderDAO.findById(id).get();
+        Order order = orderRepository.findById(id).get();
         order.setIsConfirm(false);
-        orderDAO.save(order);
-        return ResponseEntity.ok(orderDAO.findAll());
+        orderRepository.save(order);
+        return ResponseEntity.ok(orderRepository.findAll());
     }
 
     @DeleteMapping("/order/{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable Integer id) {
-        orderDAO.deleteById(id);
+        orderRepository.deleteById(id);
         return ResponseEntity.ok(new APIResponse(null));
     }
 
     @GetMapping("/orderDetail")
     public ResponseEntity<?> getOrderDetail() {
-        return ResponseEntity.ok(orderDetailDAO.findAll());
+        return ResponseEntity.ok(orderDetailRepository.findAll());
     }
 
     @GetMapping("/orderDetail/{id}")
     public ResponseEntity<?> getOrderDetailById(@PathVariable Integer id) {
-        return ResponseEntity.ok(orderDetailDAO.findAllByOrders_Id(id));
+        return ResponseEntity.ok(orderDetailRepository.findAllByOrders_Id(id));
     }
 
     @GetMapping("/public/total-order")
     public ResponseEntity<?> getTotalOrder() {
-        int length = orderDAO.findAll().size();
+        int length = orderRepository.findAll().size();
         return ResponseEntity.ok(length);
     }
 
     @GetMapping("/public/total-order-product")
     public ResponseEntity<?> TotalOrderProduct() {
-        List<OrderDetail> orderDetails = orderDetailDAO.findAll();
+        List<OrderDetail> orderDetails = orderDetailRepository.findAll();
         Integer total = 0;
         for (OrderDetail orderDetail : orderDetails) {
             total += orderDetail.getQuantity();
@@ -97,7 +97,7 @@ public class OrderApi {
 
     @GetMapping("/public/total-order-price")
     public ResponseEntity<?> TotalOrderPrice() {
-        List<OrderDetail> orderDetails = orderDetailDAO.findAll();
+        List<OrderDetail> orderDetails = orderDetailRepository.findAll();
         Integer total = 0;
         for (OrderDetail orderDetail : orderDetails) {
             total += orderDetail.getQuantity() * orderDetail.getProduct().getPrice();
@@ -129,7 +129,7 @@ public class OrderApi {
         order.setTotalQuantity(totalQuantity);
         order.setAddress(dto.getAddress());
         order.setAccount(acc);
-        orderDAO.save(order);
+        orderRepository.save(order);
         return ResponseEntity.ok(new APIResponse(null));
     }
 

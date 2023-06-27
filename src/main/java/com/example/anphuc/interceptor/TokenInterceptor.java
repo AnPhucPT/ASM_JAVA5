@@ -3,7 +3,7 @@ package com.example.anphuc.interceptor;
 import com.example.anphuc.exception.EntityNotFoundException;
 import com.example.anphuc.exception.TokenException;
 import com.example.anphuc.model.Account;
-import com.example.anphuc.repository.AccountDAO;
+import com.example.anphuc.repository.AccountRepository;
 import com.example.anphuc.utils.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +17,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Autowired
     TokenProvider tokenProvider;
     @Autowired
-    AccountDAO accountDAO;
+    AccountRepository accountRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -33,7 +33,7 @@ public class TokenInterceptor implements HandlerInterceptor {
                 try {
                     tokenProvider.validateToken(token);
                     Integer userId = tokenProvider.getIdFromToken(token);
-                    Account account = accountDAO.findById(userId).orElseThrow(() -> {
+                    Account account = accountRepository.findById(userId).orElseThrow(() -> {
                         throw new EntityNotFoundException("User not found");
                     });
                     request.setAttribute("user", account);

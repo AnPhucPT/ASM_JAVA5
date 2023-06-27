@@ -5,13 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.anphuc.repository.AccountDAO;
+import com.example.anphuc.repository.AccountRepository;
 
 @Controller
 @RequestMapping("/login")
 public class LoginController {
     @Autowired
-    AccountDAO accountDAO;
+    AccountRepository accountRepository;
 
     @GetMapping("")
     public String getLogin() {

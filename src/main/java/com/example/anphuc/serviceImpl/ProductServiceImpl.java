@@ -1,4 +1,4 @@
-package com.example.anphuc.serviceIml;
+package com.example.anphuc.serviceImpl;
 
 import com.example.anphuc.exception.EntityNotFoundException;
 import com.example.anphuc.model.Category;
@@ -9,7 +9,8 @@ import com.example.anphuc.repository.CategoryRepository;
 import com.example.anphuc.repository.ProductRepository;
 import com.example.anphuc.service.ProductService;
 import com.example.anphuc.specification.ProductSpecification;
-import com.example.anphuc.utils.ImageService;
+import com.example.anphuc.service.ImageService;
+import com.example.anphuc.utils.MinMaxUtils;
 import com.example.anphuc.utils.PageUtils;
 import com.example.anphuc.utils.RequestParamsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,5 +83,12 @@ public class ProductServiceImpl implements ProductService {
         Pageable pageable = requestParamsUtils.getPageable(productQueryParam);
         Page<Product> response = productRepository.findAll(spec, pageable);
         return new APIResponse(PageUtils.toPageResponse(response));
+    }
+
+    @Override
+    public APIResponse getMinMax() {
+        Integer min = productRepository.findMinPrice();
+        Integer max = productRepository.findMaxPrice();
+        return new APIResponse(MinMaxUtils.toMinMax(min, max));
     }
 }

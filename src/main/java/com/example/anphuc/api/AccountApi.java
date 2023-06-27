@@ -4,7 +4,7 @@ import com.example.anphuc.dto.AccountDTO;
 import com.example.anphuc.exception.EntityNotFoundException;
 import com.example.anphuc.model.Account;
 import com.example.anphuc.payload.response.APIResponse;
-import com.example.anphuc.repository.AccountDAO;
+import com.example.anphuc.repository.AccountRepository;
 import com.example.anphuc.utils.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class AccountApi {
     @Autowired
-    AccountDAO accountDAO;
+    AccountRepository accountRepository;
     @Autowired
     TokenProvider tokenProvider;
 
@@ -25,7 +25,7 @@ public class AccountApi {
 
     @PostMapping("/public/accounts")
     public ResponseEntity<?> login(@RequestBody AccountDTO dto) {
-        Account acc = accountDAO.findByEmail(dto.getEmail()).orElseThrow(() -> {
+        Account acc = accountRepository.findByEmail(dto.getEmail()).orElseThrow(() -> {
             throw new EntityNotFoundException("Email is not registered!");
         });
         if (!acc.getPassword().equals(dto.getPassword())) {
@@ -43,7 +43,7 @@ public class AccountApi {
 
     @GetMapping("/public/total-account")
     public ResponseEntity<?> TotalOrderProduct() {
-        int length = accountDAO.findAll().size();
+        int length = accountRepository.findAll().size();
         return ResponseEntity.ok(length);
     }
 }

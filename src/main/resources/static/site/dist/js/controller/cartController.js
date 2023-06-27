@@ -1,5 +1,21 @@
 var app = angular.module('app', []);
-app.controller('cartController', function ($scope, $http) {
+const defaultOptions = {
+    placement: 'bottom-right',
+    backdrop: 'dynamic',
+    backdropClasses:
+        'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40',
+    closable: true,
+};
+
+app.run(function ($rootScope) {
+    $rootScope.initModal = (selector, options) => {
+        const $targetEl = document.querySelector(selector);
+        const modal = new Modal($targetEl, { ...defaultOptions, ...options });
+        return modal;
+    };
+});
+
+app.controller('cartController', function ($scope, $http, $rootScope) {
     $scope.products = getCartFromLS();
     $scope.user = JSON.parse(localStorage.getItem('user')) || null;
     $scope.signOut = () => {
@@ -7,6 +23,32 @@ app.controller('cartController', function ($scope, $http) {
         localStorage.removeItem('user');
         $scope.user = null;
         window.open('http://localhost:8080/', '_self');
+    };
+
+    $scope.modal = $rootScope.initModal('#deleteModal');
+
+    $scope.removeProductItem = () => {
+        if ($scope.removeProduct) {
+            console.log($scope.removeProduct);
+            $scope.products = $scope.products.filter(
+                (item) => item.id !== $scope.removeProduct.id,
+            );
+        }
+        setCartToLS($scope.products);
+        $scope.hideModal();
+    };
+
+    $scope.showModal = () => {
+        $scope.modal.show();
+    };
+
+    $scope.hideModal = () => {
+        $scope.modal.hide();
+    };
+
+    $scope.setRemoveProduct = (product) => {
+        $scope.showModal();
+        $scope.removeProduct = product;
     };
 
     $scope.loading = false;
@@ -75,17 +117,10 @@ app.controller('cartController', function ($scope, $http) {
 
     $scope.decreaseQuantity = (product) => {
         if (product.quantity === 1) {
-            $scope.removeProduct(product);
+            $scope.setRemoveProduct(product);
         } else {
             product = { ...product, quantity: product.quantity-- };
         }
-        setCartToLS($scope.products);
-    };
-
-    $scope.removeProduct = (product) => {
-        $scope.products = $scope.products.filter(
-            (item) => item.id !== product.id,
-        );
         setCartToLS($scope.products);
     };
 });

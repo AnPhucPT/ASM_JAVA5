@@ -6,7 +6,7 @@ import com.example.anphuc.model.Account;
 
 import java.util.Optional;
 
-public interface AccountDAO extends JpaRepository<Account, Integer> {
+public interface AccountRepository extends JpaRepository<Account, Integer> {
     Account findByPassword(String password);
 
     Optional<Account> findByEmail(String email);
