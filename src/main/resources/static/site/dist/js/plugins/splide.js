@@ -18,7 +18,7 @@ new Splide('#TopSell', {
     breakpoints: {
         1100: {
             perPage: 2,
-            gap: 20,
+            gap: 20,    
         },
     },
     gap: 20,

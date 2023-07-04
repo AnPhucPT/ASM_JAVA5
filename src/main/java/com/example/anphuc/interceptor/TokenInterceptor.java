@@ -23,10 +23,11 @@ public class TokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         String token = getTokenFromRequest(request);
-        System.out.println(token);
+        System.out.println("token :" + token);
         String uri = request.getRequestURI();
         // Observer pattern
         if (uri.startsWith("/api/public")) {
+            System.out.println(uri);
             return true;
         } else {
             if (token != null) {

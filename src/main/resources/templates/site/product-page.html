@@ -10,6 +10,8 @@
     <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js'></script>
     <script src='/site/dist/js/darkmode/checkDarkMode.js'></script>
     <link rel="stylesheet" href="/site/dist/css/common.css">
+
+
     <style>
         .range-input input {
             -webkit-appearance: none !important;
@@ -42,10 +44,7 @@
 </head>
 
 <body class='dark:bg-gray-900' ng-app='app' ng-controller='productController'>
-    <header ng-controller='headerController' id='header'>
-
-    </header>
-
+    <div ng-include src="'/site/dist/js/partials/header.html'"></div>
     <main ng-class="{'force-show': true}" class='mt-20 hidden'>
 
         <!--  BreakCrumb Section  -->
@@ -305,22 +304,27 @@
 
 
 
+
+
+
     <div id='toast-default' class='fixed flex-col z-50 top-0 right-0 w-96 max-w-xs ' role='alert'>
     </div>
 
-    <script src='/site/dist/js/partials/header.js'></script>
-    <script>
-        renderHeader('header');
-    </script>
+
     <script src='https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js'></script>
-    <script src='/site/dist/js/darkmode/darkMode.js'></script>
     <script src='/site/dist/js/Cart.js'></script>
     <script src='/site/dist/js/plugins/toast.js'></script>
 
+    <!-- <script src="/site/dist/js/partials/header.js"></script>
+    <script>
+        renderHeader('header')
+    </script> -->
 
     <!-- ProductController -->
     <script src='/site/dist/js/controller/productController.js'></script>
     <script src='/site/dist/js/controller/header.js'></script>
+
+
 </body>
 
 

@@ -2,6 +2,7 @@ var app = angular.module('app', []);
 const initialPagination = { page: 0, pageSize: 8 };
 var range = document.getElementById('progress');
 var priceGap = 20;
+
 app.controller(
     'productController',
     function ($scope, $http, $timeout, $location) {
@@ -18,7 +19,6 @@ app.controller(
                     params: $scope.searchParams,
                 })
                 .then((res) => {
-                    console.log(res.data);
                     $scope.products = res.data.data.datas;
                     $scope.totalPage = res.data.data.totalPage;
                     $scope.totalItems = res.data.data.totalItems;
@@ -114,14 +114,14 @@ app.controller(
         $http
             .get('http://localhost:8080/api/public/categories/exist')
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 $scope.categories = res.data;
             });
 
         $http
             .get('http://localhost:8080/api/public/product/min-max')
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 $scope.minValue = 0;
                 $scope.maxValue = res.data.data.max + 30;
                 $scope.min = res.data.data.min;

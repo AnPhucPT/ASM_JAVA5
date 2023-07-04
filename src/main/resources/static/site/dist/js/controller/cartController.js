@@ -25,8 +25,6 @@ app.controller('cartController', function ($scope, $http, $rootScope) {
         window.open('http://localhost:8080/', '_self');
     };
 
-    $scope.modal = $rootScope.initModal('#deleteModal');
-
     $scope.removeProductItem = () => {
         if ($scope.removeProduct) {
             console.log($scope.removeProduct);
@@ -37,6 +35,8 @@ app.controller('cartController', function ($scope, $http, $rootScope) {
         setCartToLS($scope.products);
         $scope.hideModal();
     };
+
+    $scope.modal = $rootScope.initModal('#deleteModal');
 
     $scope.showModal = () => {
         $scope.modal.show();

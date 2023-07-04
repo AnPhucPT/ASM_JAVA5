@@ -22,7 +22,7 @@ public class CategoryApi {
 
     @GetMapping("")
     public ResponseEntity<?> getCategories() {
-        return ResponseEntity.ok(categoryRepository.findAll());
+        return ResponseEntity.ok(new APIResponse(categoryRepository.findAll()));
     }
 
     @GetMapping("/exist")

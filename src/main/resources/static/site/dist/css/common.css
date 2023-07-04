@@ -3,11 +3,12 @@ html {
     overflow-x: hidden;
 }
 
-.force-show {
-    display: block !important;
-}
 
 ::-webkit-scrollbar {
     width: 0;
     background: transparent;
+}
+
+.force-show {
+    display: block !important;
 }

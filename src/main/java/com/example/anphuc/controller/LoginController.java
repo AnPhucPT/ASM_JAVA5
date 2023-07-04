@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.anphuc.repository.AccountRepository;
 
-@Controller
 @RequestMapping("/login")
 public class LoginController {
     @Autowired
